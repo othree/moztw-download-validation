@@ -1,0 +1,19 @@
+This is a file validator for moztw's Firefox installer download link.
+
+Install protractor:
+
+    npm i -g protractor
+    webdriver-manager update
+
+Start webdriver:
+
+    webdriver-manager start
+
+Install deps:
+
+    npm i
+
+And run:
+
+    protroctor conf.js
+
