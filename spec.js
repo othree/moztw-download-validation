@@ -31,7 +31,7 @@ describe('MozTW homepage', function() {
     browser.driver.wait(function() {
       return fs.existsSync(filename);
     }, 30000).then(function() {
-      var sha1sum = exec('openssl sha1 ' + filenames).stdout.split('= ')[1].trim();
+      var sha1sum = exec('sha1sum ' + filenames).stdout.split(' ')[0].trim();
       expect(sha1sum).toEqual(winsha1);
       if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
     });
