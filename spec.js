@@ -1,9 +1,61 @@
+var fetch = require('node-fetch');
 var fs = require('fs');
 var exec = require('sync-exec');
+var cheerio = require('cheerio');
+var semver = require('semver');
 
 var winsha1 = 'd1c67f6898120f4dedd7929ac2b06e78d49a8f2f';
 
 //http://stackoverflow.com/questions/21935696/protractor-e2e-test-case-for-downloading-pdf-file/26127745
+
+var release = 'http://download-installer.cdn.mozilla.net/pub/firefox/releases/';
+
+var latest;
+
+var hash_fetcher = fetch(release).then(function (response) {
+  if (!response.ok) {
+    throw new Error('Release list not get');
+  }
+  return response.text();
+}).then(function (body) {
+  var links = cheerio.load(body)('a');
+
+  links.map(function (i, node) {
+    var ver = node.attribs.href;
+    ver = ver.substr(0, ver.length - 1);
+    if (semver.valid(ver)) {
+      latest = ver;
+    }
+  });
+
+  return latest;
+}).then(function (latest) {
+  return fetch(release + latest + '/SHA1SUMS');
+}).then(function (response) {
+  if (!response.ok) {
+    throw new Error('Release list not get');
+  }
+  return response.text();
+}).then(function (text) {
+  var installers = {};
+  var tuples = text.split("\n");
+  var i, tuple, file, sum;
+  for (i in tuples) {
+    tuple = tuples[i].split(' ');
+    sum = tuple.shift().trim();
+    file = tuple.join(' ').trim();
+    if (file === 'linux-x86_64/zh-TW/firefox-' + latest + '.tar.bz2') {
+      installers.linux = sum;
+    }
+    if (file === 'mac/zh-TW/Firefox ' + latest + '.dmg') {
+      installers.mac = sum;
+    }
+    if (file === 'win32/zh-TW/Firefox Setup Stub ' + latest + '.exe') {
+      installers.win = sum;
+    }
+  }
+  return installers;
+});
 
 describe('MozTW homepage', function() {
   var win = element(by.css('#download-link-win'));

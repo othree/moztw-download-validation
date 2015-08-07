@@ -13,6 +13,10 @@ Install deps:
 
     npm i
 
+Use iojs for Promise:
+
+    nvm use iojs
+
 And run:
 
     protroctor conf.js
