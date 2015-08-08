@@ -1,5 +1,6 @@
-var fetch = require('node-fetch');
 var fs = require('fs');
+var util = require('util');
+var fetch = require('node-fetch');
 var exec = require('sync-exec');
 var cheerio = require('cheerio');
 var semver = require('semver');
@@ -45,13 +46,22 @@ var hash_fetcher = fetch(release).then(function (response) {
     sum = tuple.shift().trim();
     file = tuple.join(' ').trim();
     if (file === 'linux-x86_64/zh-TW/firefox-' + latest + '.tar.bz2') {
-      installers.linux = sum;
+      installers.linux = {
+        file: 'firefox-' + latest + '.tar.bz2',
+        sha1sum: sum
+      };
     }
     if (file === 'mac/zh-TW/Firefox ' + latest + '.dmg') {
-      installers.mac = sum;
+      installers.mac = {
+        file: 'Firefox ' + latest + '.dmg',
+        sha1sum: sum
+      };
     }
-    if (file === 'win32/zh-TW/Firefox Setup Stub ' + latest + '.exe') {
-      installers.win = sum;
+    if (file === 'win32/zh-TW/Firefox Setup ' + latest + '.exe') {
+      installers.win = {
+        file: 'Firefox Setup ' + latest + '.exe',
+        sha1sum: sum
+      };
     }
   }
   return installers;
@@ -72,20 +82,29 @@ describe('MozTW homepage', function() {
 
     $('#download-link-win').click();
 
-    var filename  = '/tmp/Firefox Setup 39.0.exe';
-    var filenames = '/tmp/Firefox\\ Setup\\ 39.0.exe';
+    var filename;
+    var win;
 
-    if (fs.existsSync(filename)) {
-      // Make sure the browser doesn't have to rename the download.
-      fs.unlinkSync(filename);
-    }
+    hash_fetcher.then(function (data) {
+      win = data.win;
+      filename  = '/tmp/' + win.file;
+      if (fs.existsSync(filename)) {
+        // Make sure the browser doesn't have to rename the download.
+        fs.unlinkSync(filename);
+      }
+    });
 
     browser.driver.wait(function() {
-      return fs.existsSync(filename);
-    }, 30000).then(function() {
-      var sha1sum = exec('sha1sum ' + filenames).stdout.split(' ')[0].trim();
-      expect(sha1sum).toEqual(winsha1);
-      if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
+      return !!filename;
+    }, 30000).then(function () {
+      browser.driver.wait(function() {
+        return fs.existsSync(filename);
+      }, 30000).then(function() {
+        var sha1sum = exec('sha1sum ' + filename.replace(/ /g, '\\ ')).stdout.split(' ')[0].trim();
+        expect(sha1sum).toEqual(win.sha1sum);
+        if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
+      });
     });
+
   });
 });
