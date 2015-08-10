@@ -1,5 +1,10 @@
 This is a file validator for moztw's Firefox installer download link.
 
+Require:
+
+* node
+* jdk
+
 Install protractor:
 
     npm i -g protractor
