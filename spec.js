@@ -43,7 +43,7 @@ var hash_fetcher = fetch(release).then(function (response) {
     tuple = tuples[i].split(' ');
     sum = tuple.shift().trim();
     file = tuple.join(' ').trim();
-    if (file === 'linux-x86_64/zh-TW/firefox-' + latest + '.tar.bz2') {
+    if (file === 'linux-i686/zh-TW/firefox-' + latest + '.tar.bz2') {
       installers.linux = {
         file: 'firefox-' + latest + '.tar.bz2',
         sha1sum: sum
@@ -81,15 +81,12 @@ describe('MozTW homepage', function() {
     $('#download-link-win').click();
 
     var filename;
-    var win;
+    var installer;
 
     hash_fetcher.then(function (data) {
-      win = data.win;
-      filename  = '/tmp/' + win.file;
-      if (fs.existsSync(filename)) {
-        // Make sure the browser doesn't have to rename the download.
-        fs.unlinkSync(filename);
-      }
+      installer = data.win;
+      filename  = '/tmp/' + installer.file;
+      if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
     });
 
     browser.driver.wait(function() {
@@ -99,7 +96,61 @@ describe('MozTW homepage', function() {
         return fs.existsSync(filename);
       }, 30000).then(function() {
         var sha1sum = exec('sha1sum ' + filename.replace(/ /g, '\\ ')).stdout.split(' ')[0].trim();
-        expect(sha1sum).toEqual(win.sha1sum);
+        expect(sha1sum).toEqual(installer.sha1sum);
+        if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
+      });
+    });
+
+  });
+
+  it('Download OSX Installer', function() {
+
+    $('#download-link-mac').click();
+
+    var filename;
+    var installer;
+
+    hash_fetcher.then(function (data) {
+      installer = data.mac;
+      filename  = '/tmp/' + installer.file;
+      if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
+    });
+
+    browser.driver.wait(function() {
+      return !!filename;
+    }, 30000).then(function () {
+      browser.driver.wait(function() {
+        return fs.existsSync(filename);
+      }, 30000).then(function() {
+        var sha1sum = exec('sha1sum ' + filename.replace(/ /g, '\\ ')).stdout.split(' ')[0].trim();
+        expect(sha1sum).toEqual(installer.sha1sum);
+        if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
+      });
+    });
+
+  });
+
+  it('Download Linux Installer', function() {
+
+    $('#download-link-linux').click();
+
+    var filename;
+    var installer;
+
+    hash_fetcher.then(function (data) {
+      installer = data.linux;
+      filename  = '/tmp/' + installer.file;
+      if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
+    });
+
+    browser.driver.wait(function() {
+      return !!filename;
+    }, 30000).then(function () {
+      browser.driver.wait(function() {
+        return fs.existsSync(filename);
+      }, 30000).then(function() {
+        var sha1sum = exec('sha1sum ' + filename.replace(/ /g, '\\ ')).stdout.split(' ')[0].trim();
+        expect(sha1sum).toEqual(installer.sha1sum);
         if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
       });
     });
