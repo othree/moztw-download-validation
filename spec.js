@@ -5,13 +5,11 @@ var exec = require('sync-exec');
 var cheerio = require('cheerio');
 var semver = require('semver');
 
-var winsha1 = 'd1c67f6898120f4dedd7929ac2b06e78d49a8f2f';
-
 //http://stackoverflow.com/questions/21935696/protractor-e2e-test-case-for-downloading-pdf-file/26127745
 
 var release = 'http://download-installer.cdn.mozilla.net/pub/firefox/releases/';
 
-var latest;
+var latest = '0.0.1';
 
 var hash_fetcher = fetch(release).then(function (response) {
   if (!response.ok) {
@@ -24,7 +22,7 @@ var hash_fetcher = fetch(release).then(function (response) {
   links.map(function (i, node) {
     var ver = node.attribs.href;
     ver = ver.substr(0, ver.length - 1);
-    if (semver.valid(ver)) {
+    if (semver.valid(ver) && semver.gt(ver, latest)) {
       latest = ver;
     }
   });
