@@ -4,6 +4,7 @@ Require:
 
 * node
 * jdk
+* go
 
 Install protractor:
 
@@ -25,4 +26,9 @@ Use iojs for Promise:
 And run:
 
     protroctor conf.js
+
+Go deps:
+   
+    go get github.com/vaughan0/go-ini
+    go get github.com/kardianos/osext
 
