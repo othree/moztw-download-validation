@@ -10,6 +10,7 @@ var semver = require('semver');
 var release = 'http://download-installer.cdn.mozilla.net/pub/firefox/releases/';
 
 var latest = '0.0.1';
+var slatest = '0.0.1';
 
 var hash_fetcher = fetch(release).then(function (response) {
   if (!response.ok) {
@@ -21,9 +22,14 @@ var hash_fetcher = fetch(release).then(function (response) {
 
   links.map(function (i, node) {
     var ver = node.attribs.href;
+    var sver;
     ver = ver.substr(0, ver.length - 1);
-    if (semver.valid(ver) && semver.gt(ver, latest)) {
+    if (/^\d+$/.test(ver)) { sver = ver + '.0.0'; }
+    else if (/^\d+\.\d+$/.test(ver)) { sver = ver + '.0'; }
+    else { sver = ver; }
+    if (semver.valid(sver) && semver.gt(sver, slatest)) {
       latest = ver;
+      slatest = sver;
     }
   });
 
@@ -86,7 +92,7 @@ describe('MozTW homepage', function() {
     hash_fetcher.then(function (data) {
       installer = data.win;
       filename  = '/tmp/' + installer.file;
-      if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
+      // if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
     });
 
     browser.driver.wait(function() {
@@ -113,7 +119,7 @@ describe('MozTW homepage', function() {
     hash_fetcher.then(function (data) {
       installer = data.mac;
       filename  = '/tmp/' + installer.file;
-      if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
+      // if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
     });
 
     browser.driver.wait(function() {
@@ -140,7 +146,7 @@ describe('MozTW homepage', function() {
     hash_fetcher.then(function (data) {
       installer = data.linux;
       filename  = '/tmp/' + installer.file;
-      if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
+      // if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
     });
 
     browser.driver.wait(function() {
