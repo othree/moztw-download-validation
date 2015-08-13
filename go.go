@@ -3,6 +3,7 @@ package main
 import (
   "fmt"
   "time"
+  "os"
   "os/exec"
   "net/url"
   "net/http"
@@ -45,16 +46,14 @@ func main() {
     panic("Telegram Chat ID not available.")
   }
 
-  c := exec.Command("protractor", pwd + "/conf.js")
-  d, err := c.CombinedOutput()
-  if err != nil {
-    fmt.Println(err)
-    fmt.Println(string(d))
-    msg := time.Now().Format("[2006-01-02 15:04]") + " Installers Check Failure \u2757\ufe0f\u2757\ufe0f\u2757\ufe0f"
-    send_msg(api_key, chat_id_str, msg)
-  } else {
-    fmt.Println(string(d))
+  os.Chdir(pwd)
+  c := exec.Command("gulp", "test")
+  c.CombinedOutput()
+  if _, err := os.Stat(pwd + "/error-msg"); os.IsNotExist(err) {
     msg := time.Now().Format("[2006-01-02 15:04]") + " Installers Check OK"
     send_msg(api_key, chat_id_str, msg)
+  } else {
+    // msg := time.Now().Format("[2006-01-02 15:04]") + " Installers Check Failure \u2757\ufe0f\u2757\ufe0f\u2757\ufe0f"
+    // send_msg(api_key, chat_id_str, msg)
   }
 }
