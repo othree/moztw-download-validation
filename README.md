@@ -6,26 +6,14 @@ Require:
 * jdk
 * go
 
-Install protractor:
-
-    npm i -g protractor
-    webdriver-manager update
-
-Start webdriver:
-
-    webdriver-manager start
-
 Install deps:
 
     npm i
-
-Use iojs for Promise:
-
-    nvm use iojs
+    npm i -g gulp
 
 And run:
 
-    protroctor conf.js
+    npm test
 
 Go deps:
    
