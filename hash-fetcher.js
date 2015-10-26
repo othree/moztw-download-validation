@@ -21,9 +21,10 @@ var hash_fetcher = fetch(release).then(function (response) {
   var links = cheerio.load(body)('a');
 
   links.map(function (i, node) {
-    var ver = node.attribs.href;
+    var ver_frags = node.attribs.href.split('/');
+    var ver = ver_frags[ver_frags.length - 2]
     var sver;
-    ver = ver.substr(0, ver.length - 1);
+    if (/[a-z]/.test(ver)) { return; }
     if (/^\d+$/.test(ver)) { sver = ver + '.0.0'; }
     else if (/^\d+\.\d+$/.test(ver)) { sver = ver + '.0'; }
     else { sver = ver; }
