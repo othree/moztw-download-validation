@@ -36,7 +36,7 @@ var hash_fetcher = fetch(release).then(function (response) {
 
   return latest;
 }).then(function (latest) {
-  return fetch(release + latest + '/SHA1SUMS');
+  return fetch(release + latest + '/SHA512SUMS');
 }).then(function (response) {
   if (!response.ok) {
     throw new Error('Release list not get');
@@ -53,19 +53,19 @@ var hash_fetcher = fetch(release).then(function (response) {
     if (file === 'linux-i686/zh-TW/firefox-' + latest + '.tar.bz2') {
       installers.linux = {
         file: 'firefox-' + latest + '.tar.bz2',
-        sha1sum: sum
+        sha512sum: sum
       };
     }
     if (file === 'mac/zh-TW/Firefox ' + latest + '.dmg') {
       installers.mac = {
         file: 'Firefox ' + latest + '.dmg',
-        sha1sum: sum
+        sha512sum: sum
       };
     }
     if (file === 'win32/zh-TW/Firefox Setup ' + latest + '.exe') {
       installers.win = {
         file: 'Firefox Setup ' + latest + '.exe',
-        sha1sum: sum
+        sha512sum: sum
       };
     }
   }

@@ -53,9 +53,9 @@ describe('MozTW', function () {
 
     browser.click('#download-link-win');
 
-    yield waitFile(filename, 30000);
-    var sha1sum = exec('sha1sum ' + filename.replace(/ /g, '\\ ')).stdout.split(' ')[0].trim();
-    sha1sum.should.equal(installer.sha1sum);
+    yield waitFile(filename, 50000);
+    var sha1sum = exec('shasum -a 512 ' + filename.replace(/ /g, '\\ ')).stdout.split(' ')[0].trim();
+    sha1sum.should.equal(installer.sha512sum);
 
     if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
   });
@@ -69,9 +69,9 @@ describe('MozTW', function () {
 
     browser.click('#download-link-mac');
 
-    yield waitFile(filename, 30000);
-    var sha1sum = exec('sha1sum ' + filename.replace(/ /g, '\\ ')).stdout.split(' ')[0].trim();
-    sha1sum.should.equal(installer.sha1sum);
+    yield waitFile(filename, 50000);
+    var sha1sum = exec('shasum -a 512 ' + filename.replace(/ /g, '\\ ')).stdout.split(' ')[0].trim();
+    sha1sum.should.equal(installer.sha512sum);
 
     if (fs.existsSync(filename)) { fs.unlinkSync(filename); }
   });
