@@ -63,6 +63,7 @@ var hash_fetcher = fetch(release).then(function (response) {
       };
     }
     if (file === 'win32/zh-TW/Firefox Setup ' + latest + '.exe') {
+      fs.writeFileSync('hash', sum);
       installers.win = {
         file: 'Firefox Setup ' + latest + '.exe',
         sha512sum: sum

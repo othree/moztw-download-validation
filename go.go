@@ -50,13 +50,14 @@ func main() {
 	v := exec.Command("node", "version-fetcher.js")
 	v.CombinedOutput()
 	ver, err := ioutil.ReadFile(pwd + "/version")
+	hash, err := ioutil.ReadFile(pwd + "/hash")
 	c := exec.Command("gulp", "test")
 	c.CombinedOutput()
 	if _, err := os.Stat(pwd + "/error-msg"); os.IsNotExist(err) {
-		msg := time.Now().Format("[2006-01-02 15:04]") + " Firefox " + string(ver) + " Installers Check OK" 
+		msg := time.Now().Format("[2006-01-02 15:04]") + " Firefox Installers Check OK \nVERSION: " + string(ver) + ", SHA512: " + string(hash)[:10] + "..."
 		send_msg(api_key, chat_id_str, msg)
 	} else {
-		msg := time.Now().Format("[2006-01-02 15:04]") + " Installers Check Failure \u2757\ufe0f\u2757\ufe0f\u2757\ufe0f"
+		msg := time.Now().Format("[2006-01-02 15:04]") + " Firefox Installers Check Failure \u2757\ufe0f\u2757\ufe0f\u2757\ufe0f \nVERSION: " + string(ver) + ", SHA512: " + string(hash)[:10] + "..."
 		send_msg(api_key, chat_id_str, msg)
 	}
 }
