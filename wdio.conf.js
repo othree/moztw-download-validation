@@ -11,7 +11,7 @@
 var prof = "UEsDBBQACAAIANgiDUcAAAAAAAAAAAAAAAAHAAAAdXNlci5qc5VWyW7bMBC99ysKn1qgZtoEubSnNOmhQIAc0qBHgqJGFmOKQ5AjK/77DiWrsRZvN9l4b/Z5wzpCkD5A8WmhvBe1zxWBUDXh4svHQtkIn398qGdB4FRmIZ/HZQEbZokcG2dR5aJSTq34j1hi87cE90wqkHGr4/RfL493AjcQgsmBoRTqUUC9oxZ5I5TW4KmN6jDWGrcW6MFJeCMITlk2fT1MtLf7jnXQNMZxQofBWBSMT4HOlK63GFUB7TdnL84qYgQVdLlrzrzxlIiLBl0UmUW9tibSucZjyyMMIALEugJZBKykDiqW897+p1KCtUKXoNcPUKja0s+u78dppLIoGhXck7u3GE/Uaw/9xD07bjqmsaq98DxsjPw639RBCyplORY4Xq3ebokVJNuyAav5W9YhDc9CZVjT98wqt14MfeawIUQbBQ8xBs0dQrvvbDqmOVYiNzFtl2ynNK8Dz4pMezSf/V730+o+dORnzezIjG+jMuzBLa5WwzmcxrMH3+nD0amdwh2SKbYvrAfz4TugBsN6pxHL3RYtueZUp/hnlqmnlESeeW9LLqwDTWkDlh7Ckp2xbMwkP2D60sRyu0wC51WMSwtuRWnor29vh23sg2KVjEJZi43MtjLvpp4J07J5XiJPUfD8ygpzZU9MGGhuM21FYSzwl8BguDXSozV6yx5uhgHFMT5SMJrkmDZTvP/UtIMSHGtgmq/27wPLeJTSirpEpy8jN6DWnNf5ASbCZb4sqM1lqQ0Zl3mLdVYZksadX8mNAT4qK1mZt0OndFj6AeFkeGbl0LGqV1BlEJ7bnwc2KonU2pDY7Ud/r3dCNDvhPYXAsgcK2+MTPoV3K9ImPjq/U2yAV97vA5f9VW1U1MF44rveikBbmt/uvtPb2fD7K5b0trvsIq8rv5fEdKkbyPJgWFlk99KQtWNQ5LikhkCptsdInXBKp4htSNjw7p2isCylk/zux/AfrbJNHaVMWAxlVwoZaifJVGkrb0Yn4D333fusQJtDeORnA6NHzZiAc5OUdXFFlR9dux7KDwNW4bsklo7TDHeRN1dt4E86Tmnr03OThY0Lge4KubHEeh9AVcngP1BLBwih+kOQMwMAAJYKAABQSwECLQMUAAgACADYIg1HofpDkDMDAACWCgAABwAAAAAAAAAAACAApIEAAAAAdXNlci5qc1BLBQYAAAAAAQABADUAAABoAwAAAAA=";
 
 exports.config = {
-    
+    services: ['selenium-standalone'],
     //
     // ==================
     // Specify Test Files
@@ -22,6 +22,27 @@ exports.config = {
     specs: [
         './verify.js'
     ],
+    seleniumLogs : "./",
+    seleniumArgs: {
+      version : "3.141.5",
+      drivers : {
+        chrome : {
+          version : "74.0.3729.6",
+          arch    : process.arch,
+        }
+      }
+    },
+    seleniumInstallArgs: {
+      version : "3.141.5",
+      baseURL : "https://selenium-release.storage.googleapis.com",
+      drivers : {
+        chrome : {
+          version : "74.0.3729.6",
+          arch    : process.arch,
+          baseURL : "https://chromedriver.storage.googleapis.com",
+        }
+      }
+    },
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
@@ -41,7 +62,7 @@ exports.config = {
     //
     capabilities: [{
       browserName: 'chrome',
-      'chromeOptions': {
+      'goog:chromeOptions': {
         args: ['--no-sandbox', '--test-type=browser'],
         prefs: {
           'download': {
@@ -58,7 +79,7 @@ exports.config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity.
-    logLevel: 'silent',
+    logLevel: 'debug',
     //
     // Enables colors for log output
     coloredLogs: true,

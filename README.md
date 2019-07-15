@@ -6,10 +6,13 @@ Require:
 * jdk
 * go
 
+Build go:
+
+    make
+
 Install deps:
 
     npm i
-    npm i -g gulp
 
 And run:
 

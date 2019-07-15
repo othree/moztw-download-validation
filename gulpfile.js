@@ -20,14 +20,14 @@ gulp.task('selenium', function (done) {
   });
 });
 
-gulp.task('integration', ['selenium'], function () {
+gulp.task('integration', gulp.series('selenium', function () {
   if (fs.existsSync(msg)) { fs.unlinkSync(msg); }
-  var result = exec('wdio wdio.conf.js');
+  var result = exec('npx wdio wdio.conf.js');
   if (result.status) {
     jsonfile.writeFileSync(msg, {error: result.stdout});
   }
-});
+}));
 
-gulp.task('test', ['integration'], function () {
+gulp.task('test', gulp.series('integration', function () {
   selenium.child.kill();
-});
+}));
