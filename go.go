@@ -51,7 +51,7 @@ func main() {
 	v.CombinedOutput()
 	ver, err := ioutil.ReadFile(pwd + "/version")
 	hash, err := ioutil.ReadFile(pwd + "/hash")
-	c := exec.Command("gulp", "test")
+	c := exec.Command("npm", "test")
 	c.CombinedOutput()
 	if _, err := os.Stat(pwd + "/error-msg"); os.IsNotExist(err) {
 		msg := time.Now().Format("[2006-01-02 15:04]") + " Firefox Installers Check OK \nVERSION: " + string(ver) + ", SHA512: " + string(hash)[:10] + "..."

@@ -63,8 +63,17 @@ exports.config = {
     capabilities: [{
       browserName: 'chrome',
       'goog:chromeOptions': {
-        args: ['--no-sandbox', '--test-type=browser'],
+        args: [
+          '--headless',
+          '--no-sandbox', '--test-type=browser', 
+          '--disable-web-security',
+          '--safebrowsing-disable-extension-blacklist',
+          '--safebrowsing-disable-download-protection'
+        ],
         prefs: {
+          'safebrowsing.enabled': false,
+          'profile.default_content_setting_values': { 'automatic_downloads': 1 },
+          'Browser.setDownloadBehavior': {behavior : 'allow', downloadPath: '/tmp/'},
           'download': {
             'prompt_for_download': false,
             'default_directory': '/tmp/',
@@ -79,7 +88,7 @@ exports.config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity.
-    logLevel: 'debug',
+    logLevel: 'silent',
     //
     // Enables colors for log output
     coloredLogs: true,
@@ -92,7 +101,7 @@ exports.config = {
     baseUrl: 'http://localhost',
     //
     // Default timeout for all waitForXXX commands.
-    waitforTimeout: 30000,
+    waitforTimeout: 1000000,
     //
     // Initialise the browser instance with a WebdriverIO plugin. The object should have the
     // plugin name as key and the desired plugin options as property. Make sure you have
@@ -122,6 +131,9 @@ exports.config = {
     // Jasmine: `$ npm install jasmine`
     // Cucumber: `$ npm install cucumber`
     framework: 'mocha',
+    mochaOpts: {
+      timeout: 99999999
+    },
     //
     // Test reporter for stdout.
     // The following are supported: dot (default), spec and xunit
@@ -144,7 +156,9 @@ exports.config = {
     // Gets executed before test execution begins. At this point you will have access to all global
     // variables like `browser`. It is the perfect place to define custom commands.
     before: function() {
-        // do something
+        var chai = require('chai');
+        global.expect = chai.expect;
+        chai.Should();
     },
     //
     // Gets executed after all tests are done. You still have access to all global variables from
