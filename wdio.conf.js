@@ -23,20 +23,20 @@ exports.config = {
   specs: ["./verify.js"],
   seleniumLogs: "./",
   seleniumArgs: {
-    version: "3.141.5",
+    version: "3.141.59",
     drivers: {
       chrome: {
-        version: "74.0.3729.6",
+        version: "76.0.3809.126",
         arch: process.arch
       }
     }
   },
   seleniumInstallArgs: {
-    version: "3.141.5",
+    version: "3.141.59",
     baseURL: "https://selenium-release.storage.googleapis.com",
     drivers: {
       chrome: {
-        version: "74.0.3729.6",
+        version: "76.0.3809.126",
         arch: process.arch,
         baseURL: "https://chromedriver.storage.googleapis.com"
       }
