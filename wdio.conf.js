@@ -26,7 +26,7 @@ exports.config = {
     version: "3.141.59",
     drivers: {
       chrome: {
-        version: "76.0.3809.126",
+        version: "79.0.3945.36",
         arch: process.arch
       }
     }
@@ -36,7 +36,7 @@ exports.config = {
     baseURL: "https://selenium-release.storage.googleapis.com",
     drivers: {
       chrome: {
-        version: "76.0.3809.126",
+        version: "79.0.3945.36",
         arch: process.arch,
         baseURL: "https://chromedriver.storage.googleapis.com"
       }
